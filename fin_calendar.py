@@ -194,7 +194,7 @@ def dispaly_calendar():
         }
         events = create_events(daily_expenditure, salaries)
         
-        st.title("Financial Calendar")
+        st.title("IM Future Calendar")
 
         
         calendar_options = calendar_options = {
