@@ -16,10 +16,6 @@ from simulation import simulation
 from life_cycle import life_cycle
 
 
-
-openai.api_key = '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'
-
-
 def show_financial_advisor():
 
     #st.title("DGB IM Calendar")
