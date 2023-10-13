@@ -21,7 +21,7 @@ def main():
         #fin_calender()
         show_financial_advisor()
     elif st.session_state.show_submit_button:
-        st.title("모든 질문에 답하셨습니다.")  # Debug Line
+        st.write("모든 질문에 답하셨습니다.")  # Debug Line
         st.write("결과를 보시려면 '제출' 버튼을 누르세요.")  # Debug Line
         col1, col2 = st.columns(2)  # Create two columns
         #st.write("Button Condition:", st.session_state.show_submit_button)  # Debug Line
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function(event){
     const footer = streamlitDoc.getElementsByTagName("footer")[0];
     footer.innerHTML = `
         Provided by 
-        <a target="_blank" class="css-z3au9t egzxvld2">Team MiZi(미지)</a>
+        <a target="_blank" class="css-z3au9t egzxvld2">Team MiZi(미지)   </a>
         <img src="https://i.namu.wiki/i/RMFfYwm6uMpMAbnzBf9ZKX2mM3ro6TzG-FSCPOnyxT5pZQdUc0Ftp6pq3wGuHcBz74ly-Nt7JwkypXDNS3kqV9yfXVoeziDMJxlWIwsH816HwkzN4kGTuCElz4iMUvg6Ckdjy91lGUZ-UDcwghpR0g.webp" alt="DGB" height="30">
         
     `;
