@@ -1,6 +1,6 @@
 import streamlit as st
 from web_demo2 import show_financial_advisor  # Importing the function
-from survey import save_results, show_survey
+from survey import save_results, show_survey, questions
 
 
 
@@ -21,11 +21,19 @@ def main():
         #fin_calender()
         show_financial_advisor()
     elif st.session_state.show_submit_button:
-        if st.button("Submit"):
-            st.session_state.submitted = True
-        if st.button("Go back to the last question"):
-            st.session_state.show_submit_button = False
-            st.session_state.current_question = len(questions) - 1
+        st.title("모든 질문에 답하셨습니다.")  # Debug Line
+        st.write("결과를 보시려면 '제출' 버튼을 누르세요.")  # Debug Line
+        col1, col2 = st.columns(2)  # Create two columns
+        #st.write("Button Condition:", st.session_state.show_submit_button)  # Debug Line
+        
+        # Place buttons in the columns instead of in the main app, so they appear side-by-side
+        with col1:
+            if st.button("제출"):
+                st.session_state.submitted = True
+        with col2:
+            if st.button("이전 질문으로 돌아가기"):
+                st.session_state.show_submit_button = False
+                st.session_state.current_question = len(questions) - 1  
     else:
        show_survey()
     
