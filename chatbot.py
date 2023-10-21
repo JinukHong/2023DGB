@@ -62,7 +62,7 @@ def chatbot():
         
         with st.spinner("앤디가 꼼꼼한 조언을 위해 열심히 고민하고있어요... 조금만 기다려주세요!"):
             completion = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+                model="gpt-3.5-turbo-0613",
                 messages=[
                     {"role": "system", "content": system_message},
                     {"role": "user", "content": prompt}

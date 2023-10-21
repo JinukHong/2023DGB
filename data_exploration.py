@@ -8,6 +8,9 @@ def explore_data(data):
     st.header("📈 데이터 탐색")
     st.markdown("시계열 모델링을 위한 데이터 탐색")
     st.subheader("월별 총 소비와 월별 평균 resample")
+    data.index = pd.to_datetime(data.index)
+    data = data.sort_index()
+    data = data.interpolate()  # interpolate missing values
 
     # This is monthly spending and mean resampling on monthly basis
     #data_sliced = data['2022-06-11':'2023-10-03']
