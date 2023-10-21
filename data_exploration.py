@@ -10,7 +10,7 @@ def explore_data(data):
     st.subheader("월별 총 소비와 월별 평균 resample")
     data.index = pd.to_datetime(data.index)
     data = data.sort_index()
-    data = data.interpolate()  # interpolate missing values
+    data = data.fillna(method='ffill')  # forward fill
 
     # This is monthly spending and mean resampling on monthly basis
     #data_sliced = data['2022-06-11':'2023-10-03']
