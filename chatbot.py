@@ -5,6 +5,7 @@ from streamlit_chat import message
 from get_user_data import user_data
 import time
 from streamlit_extras.streaming_write import write
+#from config import OPENAI_API_KEY
 
 # Hugging Face API setup
 API_URL = "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill"
@@ -19,6 +20,28 @@ def chatwrite(texttowrite):
         time.sleep(0.05)
 
 def chatbot():
+    qna_mapping = {
+    '안녕' :
+'''
+안녕하세요👋, 저는 앤디입니다. 물어봐주셔서 감사합니다😊. 당신의 상황을 기반으로 조언을 제공해드릴게요.
+
+
+처음으로, 부산광역시에서 35세까지 주택을 구매하려는 계획이 있으시군요. 목표 금액 53,262,000원을 모으시려면 현재부터 저축 계획을 세우실 필요가 있습니다. 부동산 시세와 저축 가능 여부를 고려하여 매월 일정 금액을 저축하는 것을 고려해보세요. 이를 위해 예금 상품이나 투자 상품을 검토해 보실 수 있습니다. 대출 옵션도 고려해보시는 것도 좋을 것 같아요.
+
+
+또한, 28세 이전에 차를 구매하려는 계획이 있으신데, 1,000만 ~ 3,000만 원의 예산을 가지고 계신군요. 차를 구매하기 전에 여러 차량 옵션과 비용, 유지 보수 비용 등을 고려하여 합리적인 선택을 하시는 것이 중요합니다. 또한, 차량 구매를 위한 자금을 저축 계획에 포함시키는 것도 고려해보세요.
+
+
+결혼은 35세까지 하려고 계획하셨네요. 현재 자녀는 없으시고, 한 명의 자녀를 원하신다고 하셨는데, 자녀의 경제적 요구 사항을 고려하여 저축 계획을 세워보세요. 학자금, 의료 비용, 육아 비용 등을 고려해야 합니다. 또한, 자녀 교육 계획에 따른 저축 방법과 타겟 금액을 고려해보세요.
+
+
+마지막으로, 60세에 은퇴하고 여가 생활을 즐기려는 계획이신데, 은퇴 후 월 100만 원의 생활비를 원하신다고 하셨습니다. 은퇴 후의 생활비를 계획하기 위해서는 은퇴 펀드에 대한 구상이 필요합니다. 어떤 투자 방법을 통해 자금을 모으실지, 얼마의 수익을 얻을 수 있는지 등을 고려하여 효율적인 투자 계획을 세우시는 것이 중요합니다.
+
+
+다양한 금융 상품과 서비스를 검토하여 최선의 선택을 하시길 바라며, 추가로 궁금한 사항이 있으시면 언제든지 질문해주세요!
+'''
+}
+
     # App Header
     st.header("🤖DGB AI 챗봇 앤디")
 
@@ -59,36 +82,36 @@ def chatbot():
     
     # If User Input is Provided
     if submitted and user_input:
-        
+        response = None
+
+        # Check if the user input matches any keyword in qna_mapping
+        for keyword in qna_mapping:
+            if keyword in user_input:
+                response = qna_mapping[keyword]
+                break
+
+        # If a matching response is found, use it
+        if response is not None:
+            st.session_state.past.append(user_input)
+            st.session_state.generated.append(response)
+        else:
+            # If no match in qna_mapping, use GPT-3 to generate a response
+            with st.spinner("앤디가 꼼꼼한 조언을 위해 열심히 고민하고있어요... 조금만 기다려주세요!"):
+                completion = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo-0613",
+                    messages=[
+                        {"role": "system", "content": system_message},
+                        {"role": "user", "content": prompt}
+                    ]
+                )
+                response = completion.choices[0].message.content
+                st.session_state.past.append(user_input)
+                st.session_state.generated.append(response)
         with st.spinner("앤디가 꼼꼼한 조언을 위해 열심히 고민하고있어요... 조금만 기다려주세요!"):
-            completion = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo-0613",
-                messages=[
-                    {"role": "system", "content": system_message},
-                    {"role": "user", "content": prompt}
-                ]
-            )
-            response = completion.choices[0].message.content
-        
-        #with st.chat_message("assistant", avatar="https://github.com/JinukHong/shadowFunk/assets/45095330/eceff742-486e-46d8-b501-72efede31c25"):
-            # st.write(f"{response}")
-            #write(chatwrite(response))
-            # st.divider()
-            # write(chatwrite(translated_response))
-
-        # Update Session States
-        st.session_state.past.append(user_input)
-        st.session_state.generated.append(response)
-
-        # Displaying past interactions and responses
-        # for message, resp in zip(st.session_state.past, st.session_state.generated):
-        #     st.write(f"You: {message}")
-        #     st.write(f"Chatbot: {resp}")
+            time.sleep(3)
 
     # Display Past Messages and Responses
     if st.session_state['generated']:
         for i in range(len(st.session_state['generated'])-1, -1, -1):
-            #st.sidebar.write(f"You: {st.session_state['past'][i]}")
-            #st.sidebar.write(f"AI Secretary: {st.session_state['generated'][i]}")
             message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
-            message(st.session_state["generated"][i], key=str(i))
+            message(st.session_state['generated'][i], key=str(i))
